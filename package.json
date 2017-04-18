@@ -1,6 +1,6 @@
 {
   "name": "cloudwatchlogger",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "lib/index.js",
   "description": "Module to log directly to AWS CloudWatchLogs in NodeJS",
   "homepage": "https://github.com/rajatkumar/cloudwatchlogger",
