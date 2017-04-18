@@ -103,9 +103,13 @@ test: $(NODE_MODULES) $(MOCHA) ## Run unit tests.
 	@$(MOCHA) -R spec --full-trace $(TEST_FILES)
 
 
+.PHONY: coverage-html
+coverage-html: $(NODE_MODULES) $(ISTANBUL) $(_MOCHA) $(COVERAGE_BADGE) ## Run unit tests with coverage reporting. Generates reports into /coverage.
+	@$(ISTANBUL) cover $(_MOCHA) --report html -- -R spec $(TEST_FILES)
+
 .PHONY: coverage
 coverage: $(NODE_MODULES) $(ISTANBUL) $(_MOCHA) $(COVERAGE_BADGE) ## Run unit tests with coverage reporting. Generates reports into /coverage.
-	@$(ISTANBUL) cover $(_MOCHA) --report html -- -R spec $(TEST_FILES)
+	@$(ISTANBUL) cover $(_MOCHA) --report lcovonly -- -R spec $(TEST_FILES)
 
 
 .PHONY: report-coverage ## Report unit test coverage to coveralls
