@@ -8,6 +8,9 @@
     "name": "Rajat Kumar",
     "email": "rajatkumartx@gmail.com"
   },
+  "scripts": {
+    "test": "make test"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/rajatkumar/cloudwatchlogger"
