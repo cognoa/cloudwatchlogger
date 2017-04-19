@@ -79,7 +79,7 @@ function main(cliOptions) {
         AWSOptions.batchSize = cliOptions.batchSize;
     }
 
-    console.log(AWSOptions);
+    //console.log(AWSOptions);
 
     new Logger(AWSOptions).setupLogger(logGroupName, logStreamName,
         function(err, logger) {
