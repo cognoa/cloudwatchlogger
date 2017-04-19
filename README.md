@@ -154,6 +154,37 @@ server.listen(3003, () => {
 
 ```
 
+## CLI
+
+```
+
+cloudwatchlogger -h
+
+  Usage: cloudwatchlogger [options]
+
+  Options:
+
+    -h, --help                               output usage information
+    -V, --version                            output the version number
+    -a, --accessKeyId <accessKeyId>          AWS Access Key Id
+    -s, --secretAccessKey <secretAccessKey>  AWS Secret Access Key
+    -r, --region <region>                    AWS Region
+    -l, --logStreamName <logStreamName>      CloudWatch Log Stream Name
+    -g, --logGroupName <logGroupName>        Cloud Watch Log Group Name
+    -f, --file <pathToFile>                  or, Config JSON file containing AWS Credentials
+    -d, --debug                              [optional] Enables debug logs for this library
+    -m, --maxRetry <value>                   [optional] Max retries per log batch
+    -b, --batchSize <value>                  [optional] Batch size
+
+
+```
+
+You can use `cloudwatchlogger` to stream output from one source into AWS CloudWatchLogs.
+
+Example: The following will stream all the output from `node server.js` directly to AWS.
+
+`node server.js | cloudwatchlogger -f aws.config.json  -g loggingGroup -l loggingStream`
+
 
 ## Contributing
 
