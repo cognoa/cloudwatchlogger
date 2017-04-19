@@ -62,7 +62,7 @@ cloudwatchlogger behaviour.
 
 OPTS needs to be a JSON like this:
 
-```json
+```js
 {
     "accessKeyId": "XXXXX", // required
     "secretAccessKey": "YYYYY", // required
