@@ -3,7 +3,7 @@
 // external modules
 const assert = require('chai').assert;
 const Logger = require('../lib/index');
-const CWL = require('../lib/CloudWatchLogger');
+const CWL = require('../lib/CloudWatchLogsStream');
 const sinon = require('sinon');
 const path = require('path');
 const fs = require('fs');
@@ -101,7 +101,6 @@ describe('cloudwatchlogger - setup', function() {
 
     });
     /* eslint-enable consistent-return */
-
     afterEach(function(done) {
         CWLStub.reset();
         done();
@@ -216,7 +215,7 @@ describe('cloudwatchlogger - retry logging - sequence issue', function() {
             sequenceToken:'1001'
         });
         LoggerStub.describeLogStreams.callsArgWith(1, null, {
-            logStreams:[{ uploadSequenceToken:23123 }]
+            logStreams:[{ uploadSequenceToken:'23123' }]
         });
         done();
     });
@@ -276,7 +275,7 @@ describe('cloudwatchlogger - retry logging - sequence issue', function() {
             { code:'InvalidSequenceTokenException' });
 
         LoggerStub.describeLogStreams.callsArgWith(1, null, {
-                logStreams: [{ uploadSequenceToken2: 4006 }]
+                logStreams: [{ uploadSequenceToken2: '4006' }]
             }
         );
 
@@ -290,6 +289,45 @@ describe('cloudwatchlogger - retry logging - sequence issue', function() {
                     assert.equal(LoggerStub.putLogEvents.callCount, 2);
                     done();
                 });
+            });
+    });
+
+    it('should return an error because create Group fails', function(done) {
+        LoggerStub.createLogGroup.callsArgWith(1,
+            { code:'RandomException' });
+
+        logger.setupLogger('logName', 'logStream',
+            function(err, loggerInstance) {
+                assert.isOk(err);
+                assert.isOk(loggerInstance);
+
+                done();
+            });
+    });
+
+    it('should return an error because create Stream fails', function(done) {
+        LoggerStub.createLogStream.callsArgWith(1,
+            { code:'RandomException' });
+
+        logger.setupLogger('logName', 'logStream',
+            function(err, loggerInstance) {
+                assert.isOk(err);
+                assert.isOk(loggerInstance);
+
+                done();
+            });
+    });
+
+    it('Use logger as stream', function(done) {
+        const logStub =
+            sinon.stub(logger.cwlsObject, 'log');
+        logger.setupLogger('logName', 'logStream',
+            function(err, loggerInstance) {
+                assert.isNotOk(err);
+                assert.isOk(loggerInstance);
+                loggerInstance.getStream().write('Random Text\n');
+                assert.equal(logStub.callCount, 1);
+                done();
             });
     });
 
