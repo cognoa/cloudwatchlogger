@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "files": [
-    "lib"
+    "lib", "bin"
   ],
   "keywords": [
     "cloudwatchlogger",
