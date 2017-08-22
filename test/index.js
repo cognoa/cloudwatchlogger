@@ -32,6 +32,11 @@ const optsBad = {
     batchSize: 1
 };
 
+const optsRegionOnly = {
+    logLevel: 'trace',
+    batchSize: 1,
+};
+
 describe('cloudwatchlogger - setup', function() {
     let CWLStub = null;
 
@@ -60,6 +65,19 @@ describe('cloudwatchlogger - setup', function() {
         done();
     });
 
+    it('should work if you specify AWS_PROFILE with proper keys', function(done) {
+        new Logger(optsRegionOnly).setupLogger('logName', 'logStream',
+            function(err, logger) {
+                assert.isNotOk(err);
+                assert.isOk(logger);
+                assert.equal(CWLStub._createGroup.calledOnce, true);
+                assert.equal(CWLStub._createStream.calledOnce, true);
+                assert.equal(CWLStub._resetSequenceToken.calledOnce, true);
+                assert.equal(CWLStub._putLogs.calledOnce, false);
+                done();
+            });
+    });
+
     it('should setup logger', function(done) {
         new Logger(opts).setupLogger('logName', 'logStream',
             function(err, logger) {
@@ -85,6 +103,7 @@ describe('cloudwatchlogger - setup', function() {
                 done();
             });
     });
+
     /* eslint-disable consistent-return */
     it('should throw Exception', function(done) {
 
